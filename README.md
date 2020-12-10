@@ -1,7 +1,7 @@
 # A-Visualisation-Python
 A* Visualisation in Python using Pygame
 
-!(images/maze.png?raw=true "Title")
+![](images/maze.png)
 
 **Controls**:
 - **Right click** to add start, end and obstacles:
