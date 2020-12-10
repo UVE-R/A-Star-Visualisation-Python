@@ -1,6 +1,8 @@
 # A-Visualisation-Python
 A* Visualisation in Python using Pygame
 
+![Screenshot](maze.png)
+
 **Controls**:
 - **Right click** to add start, end and obstacles:
   - The first right click will create a start node (coloured orange)
