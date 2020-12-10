@@ -1,4 +1,4 @@
-# A-Visualisation-Python
+# A*-Visualisation-Python
 A* Visualisation in Python using Pygame
 
 ![](images/maze.png)
