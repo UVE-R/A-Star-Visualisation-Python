@@ -1,7 +1,7 @@
 # A*-Visualisation-Python
 A* Visualisation in Python using Pygame
 
-<img src="images/maze.png" width = "500"><img src="images/mazesolved.png" width = "500">
+<img src="images/maze.png" width = "300"><img src="images/mazesolved.png" width = "300">
 
 **Controls**:
 - **Right click** to add start, end and obstacles:
