@@ -1,8 +1,8 @@
 # A*-Visualisation-Python
 A* Visualisation in Python using Pygame
 
-<img src="images/maze.png" width = "400">
-<img src="images/mazesolved.png" width = "400">
+<img src="images/maze.png" width = "400"><img src="images/mazesolved.png" width = "400">
+
 ![](images/maze.png)
 ![](images/mazesolved.png)
 
