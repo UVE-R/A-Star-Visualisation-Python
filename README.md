@@ -3,7 +3,6 @@ A* Visualisation in Python using Pygame
 
 <img src="images/maze.png" width = "500"><img src="images/mazesolved.png" width = "500">
 
-
 **Controls**:
 - **Right click** to add start, end and obstacles:
   - The first right click will create a start node (coloured orange)
