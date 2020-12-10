@@ -2,6 +2,7 @@
 A* Visualisation in Python using Pygame
 
 Controls:
+
 -Right click to add start, end and obstacles:
   - The first right click will create a start node (coloured orange)
   - The second left click will create an end node (coloured turquoise)
