@@ -1,12 +1,14 @@
 ##CONTROLS##
-# RIGHT CLICK to add start, end and obstances ##
-## LEFT CLICK to remove boxes ##
+# LEFT CLICK to add start, end and obstances ##
+## RIGHT CLICK to remove boxes ##
 ## SPACE to start pathfinding ##
 ## C TO CLEAR ##
+## G TO GENERATE MAZE ##
 import pygame
 from queue import PriorityQueue
+import random
 
-WIDTH = 800
+WIDTH = 848
 WIN = pygame.display.set_mode((WIDTH,WIDTH))
 pygame.display.set_caption("A* Path Finding Algorithm")
 
@@ -21,13 +23,15 @@ PURPLE = (128,0,128)
 ORANGE = (255,165,0)
 GREY = (128,128,128)
 TURQUOISE = (64,224,208)
+MAGENTA = (255,0,255)
+LBLUE = (51,204,255)
 
 class Node(object):
     def __init__(self, row, col, width, total_rows):
         self.row = row
         self.col = col
-        self.x = row * width
-        self.y = col * width
+        self.x = col * width
+        self.y = row * width
         self.colour = WHITE
         self.neighbours = []
         self.width = width
@@ -50,7 +54,7 @@ class Node(object):
         return self.colour == ORANGE
     
     def is_end(self):
-        return self.colour == TURQUOISE
+        return self.colour == BLUE
     
     def reset(self):
         self.colour = WHITE
@@ -68,10 +72,13 @@ class Node(object):
         self.colour = BLACK
     
     def make_end(self):
-        self.colour = TURQUOISE
+        self.colour = BLUE
         
     def make_path(self):
-        self.colour = PURPLE
+        self.colour = LBLUE
+
+    def make_traversed(self):
+        self.colour = MAGENTA
         
     def draw(self,win):
         pygame.draw.rect(win,self.colour,(self.x,self.y,self.width,self.width))
@@ -106,7 +113,7 @@ def h(p1,p2):
       #Return manhattan distance
       return abs(x1-x2) + abs(y1-y2)
 
-#Cretaing path from end to start node along shortest path
+#Creating path from end to start node along shortest path
 def reconstruct_path(came_from, current, draw):
     while current in came_from:
         #Sets current to node visited before
@@ -215,16 +222,103 @@ def draw(win, grid, rows, width):
 #Finding position of mouse click
 def get_clicked_pos(pos, rows, width):
     gap = width // rows
-    y,x = pos
+    x,y = pos
     
     row = y // gap
     col = x // gap
     
     return row, col
 
+
+def create_maze_grid(grid, ROWS):
+#fill columns
+    for i in range(1,ROWS-1):
+        if i % 2 == 1:
+            for j in range(1,ROWS-1):
+                grid[i][j].make_barrier()
+                grid[j][i].make_barrier()    
+
+    return grid
+
+
+
+def generateMaze(grid, ROWS, win):    
+    
+    #http://www.migapro.com/depth-first-search/  
+
+    grid = create_maze_grid(grid, ROWS) 
+    
+    stack = []
+    visited = [[0 for x in range(ROWS)] for y in range(ROWS)] #visited matrix    
+    
+    r,c = (2,2) #x y coordinates of starting cell
+    stack.append((r,c))  
+    visited[r][c] = 1
+
+    maxn = 51 #maximum column and row index
+    minn = 2
+    
+
+    return recursive_backtracker(r,c, grid, maxn, minn, stack, visited, win, ROWS)
+
+def recursive_backtracker(r,c,grid,maxn, minn, stack, visited, win, ROWS):
+
+    #https://github.com/tonypdavis/PythonMazeGenerator/blob/master/pygame%20maze%20generator%20with%20solution.py
+    #https://en.wikipedia.org/wiki/Maze_generation_algorithm
+    
+    while len(stack) > 0:
+        
+        cells = []
+
+        #right cell
+        if c + 2 < maxn:
+            if not visited[r][c+2]:
+                cells.append((r,c+2,'r'))
+
+        #left cell
+        if c - 2 >= minn:
+            if not visited[r][c-2]:
+                cells.append((r,c-2,'l'))
+
+        #cell above
+        if r - 2 >= minn:
+            if not visited[r-2][c]:
+                cells.append((r-2,c,'u'))
+
+        #cell below
+        if r + 2 < maxn:
+            if not visited[r+2][c]:
+                cells.append((r+2,c,'d'))
+        
+        
+
+        if len(cells) > 0:
+            newr, newc, dir = random.choice(cells)
+            stack.append((newr,newc))
+            visited[newr][newc] = 1            
+
+            #remove barrier
+            #add 2 to r and c due to grid offset from true (0,0)
+            if dir == 'r':
+                grid[r][c+1].reset() 
+            elif dir == 'l':
+                grid[r][c-1].reset()
+            elif dir == 'u':
+                grid[r-1][c].reset()
+            else:
+                grid[r+1][c].reset()
+        else:
+            r,c = stack.pop()
+            grid[r][c].make_traversed()            
+            draw(win, grid, ROWS, WIDTH)
+            grid[r][c].reset()
+
+    return grid
+
+
 #MAIN
 def main(win, width):
-    ROWS = 50
+    ROWS = 53
     grid = make_grid(ROWS, width)
     
     start = None
@@ -281,6 +375,14 @@ def main(win, width):
                     start = None
                     end = None
                     grid = make_grid(ROWS, width)
+
+                if event.key == pygame.K_g:
+                    start = None
+                    end = None
+                    grid = generateMaze(grid, ROWS, win)
+                    
+
+                
     pygame.quit()
 
 
