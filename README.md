@@ -2,7 +2,7 @@
 A* Visualisation in Python for solving mazes using Pygame
 
 <img src="images/maze.png" width = "400"> <img src="images/mazesolved.png" width = "400">
-<img src="images/mazegen.png" width = "400"> <img src="images/mazesol.png" width = "400">
+<img src="images/mazegen.png" width = "400"> <img src="images/gensolved.png" width = "400">
 
 **Controls**:
 - **Left click** to add start, end and obstacles:
